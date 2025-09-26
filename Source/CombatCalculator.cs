@@ -1,6 +1,6 @@
 namespace TestProject_DDT_OOP_Pokemon.Source
 {
-    internal static class CombatCalculator
+    public static class CombatCalculator
     {
         // Tabla de efectividad
         private static readonly double[,] TypeEffectiveness = new double[,]
@@ -53,7 +53,6 @@ namespace TestProject_DDT_OOP_Pokemon.Source
                     totalModifier *= TypeEffectiveness[attackIndex, defendIndex];
                 }
             }
-
             return totalModifier;
         }
 

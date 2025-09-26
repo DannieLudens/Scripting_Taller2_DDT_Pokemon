@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using TestProject_DDT_OOP_Pokemon.Source;
+using TestProject_DDT_OOP_Pokemon.Source.Species;
 
 namespace TestProject_DDT_OOP_Pokemon;
 
@@ -76,4 +77,48 @@ public class CombatTests
             Assert.That(flamethrower.MoveType, Is.EqualTo(MoveType.Special));
         }
     }
-}
+
+    [TestFixture]
+    public class TypeModifierTests
+    {
+        [TestCase(PokemonType.Fire, PokemonType.Water, 0.5)]      // Fire vs Water = No muy efectivo
+        [TestCase(PokemonType.Water, PokemonType.Fire, 2.0)]      // Water vs Fire = Super efectivo  
+        [TestCase(PokemonType.Electric, PokemonType.Ground, 0.0)] // Electric vs Ground = Inmune
+        [TestCase(PokemonType.Normal, PokemonType.Rock, 1.0)]     // Normal vs cualquiera = Normal
+        [TestCase(PokemonType.Rock, PokemonType.Fire, 2.0)]       // Rock vs Fire = Super efectivo
+        [TestCase(PokemonType.Fire, PokemonType.Rock, 0.5)]       // Fire vs Rock = No muy efectivo
+        public void TestSingleTypeModifiers(PokemonType attackType, PokemonType defendType, double expectedMod)
+        {
+            var defendingTypes = new List<PokemonType> { defendType };
+            double result = CombatCalculator.CalculateTypeModifier(attackType, defendingTypes);
+            Assert.That(result, Is.EqualTo(expectedMod).Within(0.01));
+        }
+
+        [Test] 
+        public void TestDualTypeModifiers_GeodudeBareExamples()
+        {
+            // Geodude es Rock/Ground
+            var geodude = new Geodude();
+            
+            // Water vs Rock/Ground = 2.0 × 2.0 = 4.0 (cuádruple daño)
+            double waterMod = CombatCalculator.CalculateTypeModifier(PokemonType.Water, geodude.Types);
+            Assert.That(waterMod, Is.EqualTo(4.0).Within(0.01));
+            
+            // Electric vs Rock/Ground = 1.0 × 0.0 = 0.0 (inmune)
+            double electricMod = CombatCalculator.CalculateTypeModifier(PokemonType.Electric, geodude.Types);
+            Assert.That(electricMod, Is.EqualTo(0.0).Within(0.01));
+        }
+        
+        [Test]
+        public void TestDualTypeModifiers_GastlyExamples()
+        {
+            // Gastly es Ghost/Poison  
+            var gastly = new Gastly();
+            
+            // Psychic vs Ghost/Poison = 2.0 × 1.0 = 2.0
+            double psychicMod = CombatCalculator.CalculateTypeModifier(PokemonType.Psychic, gastly.Types);
+            Assert.That(psychicMod, Is.EqualTo(2.0).Within(0.01));
+        }
+    }
+
+} 

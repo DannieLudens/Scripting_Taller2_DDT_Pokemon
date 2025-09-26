@@ -1,6 +1,6 @@
 ﻿namespace TestProject_DDT_OOP_Pokemon.Source
 {
-    internal class Pokemon
+    public class Pokemon
     {
         public string Name { get; }
         public int Level { get; }    // 1..99 (default 1)

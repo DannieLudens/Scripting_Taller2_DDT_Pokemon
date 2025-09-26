@@ -1,6 +1,6 @@
 ﻿namespace TestProject_DDT_OOP_Pokemon.Source
 {
-    internal class Move
+    public class Move
     {
         public string Name { get; }
         public int Power { get; }    // 1..255, default 100
