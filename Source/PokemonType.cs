@@ -1,13 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TestProject_DDT_OOP_Pokemon.Source
+﻿namespace TestProject_DDT_OOP_Pokemon.Source
 {
+    // Tipos que aparecen en la tabla de modificadores (más Normal para usos generales).
     internal enum PokemonType
     {
-        None
+        Rock,
+        Ground,
+        Water,
+        Electric,
+        Fire,
+        Grass,
+        Ghost,
+        Poison,
+        Psychic,
+        Bug,
+        Normal
     }
 }
