@@ -94,7 +94,9 @@ namespace TestProject_DDT_OOP_Pokemon.Source
             double finalDamage = baseDamage * modifier;
 
             // Redondear hacia abajo y retornar como entero
-            return (int)Math.Floor(finalDamage);
+            int floored = (int)Math.Floor(finalDamage);
+            if (modifier > 0 && floored < 1) return 1; // daño mínimo
+            return floored;
         }
     }
 }

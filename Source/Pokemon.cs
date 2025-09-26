@@ -18,34 +18,33 @@
         // Constructor por defecto: valores por defecto según enunciado,
         // y al menos un movimiento por defecto.
         public Pokemon()
-            : this(string.Empty, 
-                  1, 
-                  10, 
-                  10, 
-                  10, 
-                  10, 
-                  null, 
+            : this(string.Empty,
+                  1,
+                  10,
+                  10,
+                  10,
+                  10,
+                  null,
                   null)
         { }
-
         // Constructor completo (acepta named params como en tests)
-        public Pokemon(string name = "", 
-                         int level = 1, 
-                           int atk = 10, 
-                           int def = 10, 
-                         int spAtk = 10, 
-                         int spDef = 10, 
-          List<PokemonType>? types = null, 
+        public Pokemon(string name = "",
+                         int level = 1,
+                           int atk = 10,
+                           int def = 10,
+                         int spAtk = 10,
+                         int spDef = 10,
+          List<PokemonType>? types = null,
                  List<Move>? moves = null)
         {
             Name = name ?? string.Empty;
             Level = Clamp(level, 1, 99, 1);
 
-            // Para stats, permitir 0:
-            Atk = atk < 0 ? 0 : (atk > 255 ? 255 : atk);
-            Def = def < 0 ? 0 : (def > 255 ? 255 : def);
-            SpAtk = spAtk < 0 ? 0 : (spAtk > 255 ? 255 : spAtk);
-            SpDef = spDef < 0 ? 0 : (spDef > 255 ? 255 : spDef);
+            // Clamp estricto 1..255
+            Atk = Clamp(atk, 1, 255, 10);
+            Def = Clamp(def, 1, 255, 10);
+            SpAtk = Clamp(spAtk, 1, 255, 10);
+            SpDef = Clamp(spDef, 1, 255, 10);
 
             Types = types ?? new List<PokemonType>();
             if (Types.Count > 2)
