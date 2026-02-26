@@ -13,6 +13,6 @@
         Poison,
         Psychic,
         Bug,
-        Normal
+        Normal // no está en la tabla, no deberia de ponerlo segun el limitante
     }
 }

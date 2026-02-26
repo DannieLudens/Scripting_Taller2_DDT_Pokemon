@@ -21,9 +21,9 @@ public class CombatTests
             Assert.That(pikachu.Def, Is.EqualTo(10));
             Assert.That(pikachu.SpAtk, Is.EqualTo(10));
             Assert.That(pikachu.SpDef, Is.EqualTo(10));
-            Assert.That(pikachu.Types.Count, Is.EqualTo(0)); // sin tipo al inicio
+            Assert.That(pikachu.Types.Count, Is.EqualTo(0)); // sin valor por defecto
             Assert.That(pikachu.Moves.Count, Is.EqualTo(1));
-        }
+        } // testear no solo el defecto sino también los límites u otros casos aleatorios de creacion
 
         [Test]
         public void TestPokemon_CustomValues()
@@ -81,13 +81,13 @@ public class CombatTests
     [TestFixture]
     public class TypeModifierTests
     {
-        [TestCase(PokemonType.Fire, PokemonType.Water, 0.5)]      // Fire vs Water = No muy efectivo
-        [TestCase(PokemonType.Water, PokemonType.Fire, 2.0)]      // Water vs Fire = Super efectivo  
-        [TestCase(PokemonType.Electric, PokemonType.Ground, 0.0)] // Electric vs Ground = Inmune
-        [TestCase(PokemonType.Normal, PokemonType.Rock, 1.0)]     // Normal vs cualquiera = Normal
-        [TestCase(PokemonType.Rock, PokemonType.Fire, 2.0)]       // Rock vs Fire = Super efectivo
-        [TestCase(PokemonType.Fire, PokemonType.Rock, 0.5)]       // Fire vs Rock = No muy efectivo
-        public void TestSingleTypeModifiers(PokemonType attackType, PokemonType defendType, double expectedMod)
+        [TestCase(PokemonType.Fire, PokemonType.Water, 0.5f)]      // Fire vs Water = No muy efectivo
+        [TestCase(PokemonType.Water, PokemonType.Fire, 2.0f)]      // Water vs Fire = Super efectivo  
+        [TestCase(PokemonType.Electric, PokemonType.Ground, 0.0f)] // Electric vs Ground = Inmune
+        [TestCase(PokemonType.Normal, PokemonType.Rock, 1.0f)]     // Normal vs cualquiera = Normal
+        [TestCase(PokemonType.Rock, PokemonType.Fire, 2.0f)]       // Rock vs Fire = Super efectivo
+        [TestCase(PokemonType.Fire, PokemonType.Rock, 0.5f)]       // Fire vs Rock = No muy efectivo
+        public void TestSingleTypeModifiers(PokemonType attackType, PokemonType defendType, float expectedMod)
         {
             var defendingTypes = new List<PokemonType> { defendType };
             double result = CombatCalculator.CalculateTypeModifier(attackType, defendingTypes);
@@ -101,11 +101,11 @@ public class CombatTests
             var geodude = new Geodude();
             
             // Water vs Rock/Ground = 2.0 × 2.0 = 4.0 (cuádruple daño)
-            double waterMod = CombatCalculator.CalculateTypeModifier(PokemonType.Water, geodude.Types);
+            float waterMod = CombatCalculator.CalculateTypeModifier(PokemonType.Water, geodude.Types);
             Assert.That(waterMod, Is.EqualTo(4.0).Within(0.01));
             
             // Electric vs Rock/Ground = 1.0 × 0.0 = 0.0 (inmune)
-            double electricMod = CombatCalculator.CalculateTypeModifier(PokemonType.Electric, geodude.Types);
+            float electricMod = CombatCalculator.CalculateTypeModifier(PokemonType.Electric, geodude.Types);
             Assert.That(electricMod, Is.EqualTo(0.0).Within(0.01));
         }
         
@@ -165,7 +165,7 @@ public class CombatTests
         [TestCase(38, 60,  100, 255, 128, 1, 40,   false, TestName = "Case38_Damage_40_Physical")]
         [TestCase(39, 80,  90,  45,  90,  1, 17,   true,  TestName = "Case39_Damage_17_Special")]
         [TestCase(40, 99,  200, 150, 150, 1, 84,   false, TestName = "Case40_Damage_84_Physical")]
-        public void TestDamageCalculation(int caseNum, int level, int power, int attackStat, int defenseStat, double modifier, int expected, bool isSpecial)
+        public void TestDamageCalculation(int caseNum, int level, int power, int attackStat, int defenseStat, float modifier, int expected, bool isSpecial)
         {
             // Obtener tipos según el modificador
             var (attackType, defenseTypes) = GetTypesForModifier(modifier);
@@ -189,12 +189,12 @@ public class CombatTests
             var move = new Move($"TestMove{caseNum}", power, 1, attackType, moveType);
             
             // Ejecutar y verificar
-            int damage = CombatCalculator.CalculateDamage(attacker, move, defender);
+            float damage = CombatCalculator.CalculateDamage(attacker, move, defender);
             Assert.That(damage, Is.EqualTo(expected), $"Case {caseNum} failed");
         }
 
         // Método helper para obtener tipos según el modificador
-        private static (PokemonType attackType, List<PokemonType> defenseTypes) GetTypesForModifier(double modifier)
+        private static (PokemonType attackType, List<PokemonType> defenseTypes) GetTypesForModifier(float modifier)
         {
             return modifier switch
             {

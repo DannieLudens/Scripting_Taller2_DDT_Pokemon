@@ -2,6 +2,8 @@
 {
     public class Pokemon
     {
+        // Estas son propiedades de solo lectura (get only)
+        // get only porque ya se asignan en el constructor entonces no hace falta set
         public string Name { get; }
         public int Level { get; }    // 1..99 (default 1)
         public int Atk { get; }      // 1..255 (default 10)
@@ -17,15 +19,15 @@
 
         // Constructor por defecto: valores por defecto según enunciado,
         // y al menos un movimiento por defecto.
-        public Pokemon()
-            : this(string.Empty,
-                  1,
-                  10,
-                  10,
-                  10,
-                  10,
-                  null,
-                  null)
+        public Pokemon() : this(
+                                string.Empty,
+                                           1,
+                                          10,
+                                          10,
+                                          10,
+                                          10,
+                                        null,
+                                        null)
         { }
         // Constructor completo (acepta named params como en tests)
         public Pokemon(string name = "",

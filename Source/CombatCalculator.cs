@@ -3,21 +3,23 @@ namespace TestProject_DDT_OOP_Pokemon.Source
     public static class CombatCalculator
     {
         // Tabla de efectividad
-        private static readonly double[,] TypeEffectiveness = new double[,]
+        private static readonly float[,] TypeEffectiveness = new float[,]
         {
             // attacking   Defending
             //             Rock  Ground Water Electric Fire  Grass Ghost Poison Psychic Bug 
-            /* Rock     */ { 1,    0.5,  1,     1,      2,    0.5,  1,    1,     1,     2 },
-            /* Ground   */ { 2,    1,    1,     2,      2,    0.5,  1,    2,     1,     0.5 },
-            /* Water    */ { 2,    2,    0.5,   1,      2,    0.5,  1,    1,     1,     1 },
-            /* Electric */ { 1,    0,    2,     0.5,    1,    0.5,  1,    1,     1,     1 },
-            /* Fire     */ { 0.5,  1,    0.5,   1,      0.5,  2,    1,    1,     1,     2 },
-            /* Grass    */ { 2,    2,    2,     1,      0.5,  0.5,  1,    0.5,   1,     0.5 },
+            /* Rock     */ { 1,    0.5f,  1,     1,      2,    0.5f,  1,    1,     1,     2 },
+            /* Ground   */ { 2,    1,    1,     2,      2,    0.5f,  1,    2,     1,     0.5f },
+            /* Water    */ { 2,    2,    0.5f,   1,      2,    0.5f,  1,    1,     1,     1 },
+            /* Electric */ { 1,    0,    2,     0.5f,    1,    0.5f,  1,    1,     1,     1 },
+            /* Fire     */ { 0.5f,  1,    0.5f,   1,      0.5f,  2,    1,    1,     1,     2 },
+            /* Grass    */ { 2,    2,    2,     1,      0.5f,  0.5f,  1,    0.5f,   1,     0.5f },
             /* Ghost    */ { 1,    1,    1,     1,      1,    1,    2,    1,     2,     1 },
-            /* Poison   */ { 0.5,  0.5,  1,     1,      1,    2,    0.5,  0.5,   1,     1 },
-            /* Psychic  */ { 1,    1,    1,     1,      1,    1,    1,    2,     0.5,   0.5 },
-            /* Bug      */ { 1,    1,    1,     1,      0.5,  2,    1,    1,     2,     1 }
-        };
+            /* Poison   */ { 0.5f,  0.5f,  1,     1,      1,    2,    0.5f,  0.5f,   1,     1 },
+            /* Psychic  */ { 1,    1,    1,     1,      1,    1,    1,    2,     0.5f,   0.5f },
+            /* Bug      */ { 1,    1,    1,     1,      0.5f,  2,    1,    1,     2,     1 }
+        };        // esto con un if anidado y un switch y sale mas mejor segun el profesor
+
+
 
         /// <summary>
         /// Calcula el modificador de tipo (MOD) para un ataque
@@ -25,9 +27,9 @@ namespace TestProject_DDT_OOP_Pokemon.Source
         /// <param name="attackingType">Tipo del movimiento atacante</param>
         /// <param name="defendingTypes">Lista de tipos del Pokémon defensor</param>
         /// <returns>Modificador final (producto de todos los modificadores)</returns>
-        public static double CalculateTypeModifier(PokemonType attackingType, List<PokemonType> defendingTypes)
+        public static float CalculateTypeModifier(PokemonType attackingType, List<PokemonType> defendingTypes)
         {
-            double totalModifier = 1.0;
+            float totalModifier = 1;
 
             // Si el tipo atacante es Normal o el defensor no tiene tipos, modificador = 1
             if (attackingType == PokemonType.Normal || defendingTypes.Count == 0)
@@ -63,10 +65,10 @@ namespace TestProject_DDT_OOP_Pokemon.Source
         /// <param name="move">Movimiento usado</param>
         /// <param name="defender">Pokémon defensor</param>
         /// <returns>Daño final (entero, redondeado hacia abajo)</returns>
-        public static int CalculateDamage(Pokemon attacker, Move move, Pokemon defender)
+        public static float CalculateDamage(Pokemon attacker, Move move, Pokemon defender)
         {
             // Calcular modificador de tipo
-            double modifier = CalculateTypeModifier(move.Type, defender.Types);
+            float modifier = CalculateTypeModifier(move.Type, defender.Types);
 
             // Si el modificador es 0, no hay daño
             if (modifier == 0)
@@ -74,29 +76,28 @@ namespace TestProject_DDT_OOP_Pokemon.Source
                 return 0;
             }
 
-            double baseDamage;
+            float baseDamage;
 
             // Usar la fórmula apropiada según el tipo de movimiento
             if (move.MoveType == MoveType.Physical)
             {
                 // Fórmula para ataques físicos
-                baseDamage = ((2.0 * attacker.Level / 5.0 + 2.0) * 
-                              (move.Power * (double)attacker.Atk / defender.Def + 2.0)) / 50.0;
+                baseDamage = ((2 * (attacker.Level / 5) + 2) * (move.Power * ((float)attacker.Atk / defender.Def) + 2)) / 50;
             }
             else // MoveType.Special
             {
                 // Fórmula para ataques especiales  
-                baseDamage = ((2.0 * attacker.Level / 5.0 + 2.0) * 
-                              (move.Power * (double)attacker.SpAtk / defender.SpDef + 2.0)) / 50.0;
+                baseDamage = ((2 * (attacker.Level / 5) + 2) * (move.Power * ((float)attacker.SpAtk / defender.SpDef) + 2)) / 50;
             }
 
             // Aplicar modificador de tipo
-            double finalDamage = baseDamage * modifier;
+            float finalDamage = baseDamage * modifier;
 
             // Redondear hacia abajo y retornar como entero
-            int floored = (int)Math.Floor(finalDamage);
-            if (modifier > 0 && floored < 1) return 1; // daño mínimo
-            return floored;
+            //int floored = (int)Math.Floor(finalDamage);
+            //if (modifier > 0 && floored < 1) return 1; // daño mínimo
+            //return floored;
+            return Math.Max(1,finalDamage); // daño mínimo 1 si el modificador es > 0
         }
     }
 }
